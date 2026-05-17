@@ -16,13 +16,13 @@ export default function BottomNavigation({ activeKey = 'home', onTabPress, varia
   return (
     <View
       className={cn(
-        'w-full flex-row items-start justify-between border-t border-[#AAB3B926] bg-[#FFFFFFCC] pb-[24px] pt-[12px] shadow-topBar',
+        'w-full flex-row items-start justify-between border-t border-[#AAB3B926] bg-[#FFFFFFF2] pb-[24px] pt-[12px] shadow-topBar',
         usesRoundedVariant
           ? cn(
-              isOrgVariant ? 'rounded-t-[20px] px-[29.45px]' : 'rounded-t-bottomNav px-[16px]',
+              isOrgVariant ? 'rounded-t-[20px] px-[29px]' : 'rounded-t-bottomNav px-[16px]',
               isChatVariant ? 'h-[83px]' : isContentVariant || isNewsVariant ? 'h-[101px]' : isOrgVariant ? 'h-[88px]' : 'h-[86px]',
             )
-          : 'h-[76px] px-[29.6px]',
+          : 'h-navH px-[30px]',
       )}
     >
       {bottomTabs.map((tab) => {
@@ -31,18 +31,14 @@ export default function BottomNavigation({ activeKey = 'home', onTabPress, varia
         return (
           <Pressable
             className={cn(
-              'items-center',
+              'min-w-[48px] items-center',
               usesRoundedVariant && active && !isNewsVariant ? 'min-w-[72px] rounded-[10px] bg-[#D9E5FF] px-[10px] py-[7px]' : '',
             )}
             key={tab.key}
             onPress={() => onTabPress?.(tab.key)}
           >
             <Feather name={tab.icon} size={22} color={active ? '#0B5CD7' : '#8797AA'} />
-            <AppText
-              className={`mt-[4px] text-nav font-bold uppercase ${
-                active ? 'text-homeBlue' : 'text-[#8797AA]'
-              }`}
-            >
+            <AppText variant="nav" className={`mt-[4px] ${active ? 'text-homeBlue' : 'text-[#8797AA]'}`}>
               {tab.label}
             </AppText>
           </Pressable>

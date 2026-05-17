@@ -8,10 +8,10 @@ export default function MessageBubble({ message }) {
   const mine = message.senderId === currentUserId;
 
   return (
-    <View className={`mb-[8px] ${mine ? 'items-end' : 'items-start'}`}>
+    <View className={`mb-[24px] ${mine ? 'items-end' : 'items-start'}`}>
       <View
-        className={`max-w-[78%] rounded-[18px] px-[16px] py-[11px] ${
-          mine ? 'rounded-br-[5px] bg-homeBlue' : 'rounded-bl-[5px] bg-white'
+        className={`max-w-[80%] rounded-[14px] px-[16px] py-[17px] ${
+          mine ? 'rounded-br-[3px] bg-action' : 'rounded-bl-[3px] bg-white'
         }`}
       >
         {message.type === 'attachment' ? (
@@ -22,13 +22,18 @@ export default function MessageBubble({ message }) {
             </AppText>
           </View>
         ) : null}
-        <AppText className={`text-[15px] leading-[21px] ${mine ? 'text-white' : 'text-charcoal'}`}>
+        <AppText className={`text-[17px] leading-[28px] ${mine ? 'text-ink' : 'text-charcoal'}`}>
           {message.text}
         </AppText>
       </View>
-      <AppText className="mt-[4px] text-[10px] uppercase leading-[12px] text-silver">
-        {message.createdAt} {mine ? `· ${message.status}` : ''}
-      </AppText>
+      <View className="mt-[8px] flex-row items-center">
+        <AppText className="text-[11px] leading-[14px] text-silver">{message.createdAt}</AppText>
+        {mine ? (
+          <View className="ml-[5px]">
+            <Feather name="check" size={11} color="#0B5CD7" />
+          </View>
+        ) : null}
+      </View>
     </View>
   );
 }

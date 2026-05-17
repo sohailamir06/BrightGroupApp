@@ -2,14 +2,12 @@ import { FlatList, RefreshControl, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import BottomNavigation from '../../components/home/BottomNavigation';
-import CategoryTabs from '../../components/content/CategoryTabs';
 import ContentCard from '../../components/content/ContentCard';
 import ContentEmptyState from '../../components/content/ContentEmptyState';
 import ContentHeader from '../../components/content/ContentHeader';
 import ContentLoadingSkeleton from '../../components/content/ContentLoadingSkeleton';
 import ContentSearchBar from '../../components/content/ContentSearchBar';
 import FeaturedContentCard from '../../components/content/FeaturedContentCard';
-import FilterChip from '../../components/content/FilterChip';
 import SectionHeader from '../../components/content/SectionHeader';
 import { ROUTES } from '../../constants/routes';
 import { useContentFeed } from '../../hooks/content/useContentFeed';
@@ -57,16 +55,6 @@ export default function ContentFeedScreen({ navigation }) {
           subtitle="Pick up where you left off"
           actionLabel="View All History"
         />
-        <CategoryTabs
-          categories={content.categories}
-          activeId={content.activeCategoryId}
-          onChange={content.setActiveCategoryId}
-        />
-        <View className="mt-[14px] flex-row flex-wrap">
-          {content.tags.map((tag) => (
-            <FilterChip active={content.query === tag} key={tag} label={tag} onPress={() => content.setQuery(tag)} />
-          ))}
-        </View>
       </View>
     </View>
   );

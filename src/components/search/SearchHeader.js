@@ -9,18 +9,18 @@ export default function SearchHeader({ onMenuPress }) {
   const handleMenuPress = onMenuPress || openSidebar;
 
   return (
-    <View className="h-[69px] w-full flex-row items-center justify-between border-b border-[#AAB3B94D] bg-[#F8F9FBCC] px-[16px]">
+    <View className="h-headerH w-full flex-row items-center justify-between border-b border-[#AAB3B94D] bg-[#F8F9FBF2] px-[16px]">
       <View className="flex-row items-center">
-        <Pressable className="h-[32px] w-[32px] items-center justify-center" onPress={handleMenuPress}>
+        <Pressable className="h-touch w-touch items-center justify-center" onPress={handleMenuPress}>
           <Feather name="menu" size={24} color="#4B5563" />
         </Pressable>
-        <AppText className="ml-[18px] text-[20px] font-bold leading-[24px] text-ink">
+        <AppText className="ml-[6px] text-[20px] font-bold leading-[24px] text-ink">
           BrightNow
         </AppText>
       </View>
 
       <View className="flex-row items-center">
-        <Pressable className="h-[34px] w-[34px] items-center justify-center">
+        <Pressable className="h-touch w-touch items-center justify-center">
           <Feather name="bell" size={21} color="#4B5563" />
         </Pressable>
         <Image

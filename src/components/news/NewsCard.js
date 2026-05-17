@@ -50,7 +50,9 @@ export default function NewsCard({ item, onPress, onBookmark, onLike, onToggleRe
           </View>
           <Pressable className="flex-row items-center" onPress={() => onPress?.(item)}>
             <AppText className="text-[13px] font-bold leading-[16px] text-homeBlue">Read more</AppText>
-            <Feather name="arrow-right" size={15} color="#0B5CD7" style={{ marginLeft: 3 }} />
+            <View className="ml-[3px]">
+              <Feather name="arrow-right" size={15} color="#0B5CD7" />
+            </View>
           </Pressable>
         </View>
       </View>

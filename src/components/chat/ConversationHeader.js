@@ -6,18 +6,18 @@ import Avatar from './Avatar';
 
 export default function ConversationHeader({ user, onBack }) {
   return (
-    <View className="h-[69px] flex-row items-center border-b border-[#AAB3B94D] bg-[#F8F9FBCC] px-[16px]">
-      <Pressable className="h-[36px] w-[36px] items-center justify-center" onPress={onBack}>
-        <Feather name="chevron-left" size={28} color="#2A3038" />
+    <View className="h-[80px] flex-row items-center bg-canvas px-[24px]">
+      <Pressable className="ml-[-6px] h-[36px] w-[36px] items-center justify-center" onPress={onBack}>
+        <Feather name="arrow-left" size={24} color="#0B5CD7" />
       </Pressable>
-      <Avatar user={user} size={48} showStatus />
-      <View className="ml-[13px] flex-1">
-        <AppText className="text-[17px] font-bold leading-[21px] text-charcoal">{user?.name}</AppText>
-        <AppText className="mt-[2px] text-[12px] leading-[15px] text-muted">
-          {user?.online ? 'Online' : 'Offline'}
+      <Avatar user={user} size={42} showStatus />
+      <View className="ml-[12px] flex-1">
+        <AppText className="text-[22px] font-bold leading-[27px] text-charcoal">{user?.name}</AppText>
+        <AppText className="mt-[-2px] text-[11px] uppercase leading-[14px] tracking-[2px] text-silver">
+          {user?.online ? 'Online Now' : 'Offline'}
         </AppText>
       </View>
-      <Feather name="more-horizontal" size={24} color="#4B5563" />
+      <Feather name="more-vertical" size={22} color="#0B5CD7" />
     </View>
   );
 }
