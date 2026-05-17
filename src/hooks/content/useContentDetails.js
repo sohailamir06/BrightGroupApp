@@ -1,26 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
-import { contentAuthors, contentPosts } from '../../constants/mock/contentData';
+import { contentAuthors } from '../../constants/mock/contentData';
+import { contentActions, useContentStore } from '../../store/content/contentStore';
 
 export function useContentDetails(contentId) {
-  const sourcePost = contentPosts.find((item) => item.id === contentId) || contentPosts[0];
-  const [bookmarked, setBookmarked] = useState(Boolean(sourcePost.bookmarked));
-  const [liked, setLiked] = useState(Boolean(sourcePost.liked));
+  const contentState = useContentStore();
+  const sourcePost = contentState.posts.find((item) => item.id === contentId) || contentState.posts[0];
 
-  const post = useMemo(
-    () => ({
-      ...sourcePost,
-      bookmarked,
-      liked,
-      likes: sourcePost.likes + (liked && !sourcePost.liked ? 1 : 0),
-    }),
-    [bookmarked, liked, sourcePost],
-  );
+  const post = useMemo(() => sourcePost, [sourcePost]);
 
   return {
     post,
     author: contentAuthors[post.authorId],
-    toggleBookmark: () => setBookmarked((current) => !current),
-    toggleLike: () => setLiked((current) => !current),
+    toggleBookmark: () => contentActions.toggleBookmark(post.id),
+    toggleLike: () => contentActions.toggleLike(post.id),
   };
 }

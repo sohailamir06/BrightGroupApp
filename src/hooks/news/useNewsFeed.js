@@ -1,20 +1,19 @@
 import { useMemo, useState } from 'react';
 
 import { getNewsFeedPage, getNewsMetadata } from '../../services/news/newsRepository';
+import { newsActions, useNewsStore } from '../../store/news/newsStore';
 import {
   filterNewsByCategory,
   searchNews,
   sortNews,
-  toggleBookmark,
-  toggleReaction,
-  toggleReadState,
 } from '../../utils/news/newsFilters';
 
 const initialPage = getNewsFeedPage();
 const metadata = getNewsMetadata();
 
 export function useNewsFeed() {
-  const [items, setItems] = useState(initialPage.items);
+  const newsState = useNewsStore();
+  const items = newsState.items;
   const [query, setQuery] = useState('');
   const [activeCategoryId, setActiveCategoryId] = useState('all');
   const [activeSortId, setActiveSortId] = useState('recent');
@@ -60,9 +59,9 @@ export function useNewsFeed() {
     refresh,
     pageInfo,
     loadNextPage: () => pageInfo.hasNextPage,
-    toggleSaved: (newsId) => setItems((current) => toggleBookmark(current, newsId)),
-    toggleLike: (newsId) => setItems((current) => toggleReaction(current, newsId)),
-    toggleRead: (newsId) => setItems((current) => toggleReadState(current, newsId)),
+    toggleSaved: newsActions.toggleBookmark,
+    toggleLike: newsActions.toggleLike,
+    toggleRead: newsActions.toggleRead,
     hasNoResults: !isLoading && filteredItems.length === 0,
   };
 }

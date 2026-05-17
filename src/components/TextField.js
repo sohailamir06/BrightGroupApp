@@ -1,4 +1,5 @@
-import { TextInput, View } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 import { colors } from '../constants/theme';
 import { cn } from '../utils/classNames';
@@ -10,6 +11,9 @@ export default function TextField({
   onActionPress,
   className,
   inputClassName,
+  error,
+  rightIcon,
+  onRightIconPress,
   ...props
 }) {
   return (
@@ -29,13 +33,24 @@ export default function TextField({
       </View>
       <TextInput
         className={cn(
-          'h-inputH rounded-input bg-field px-[17px] text-[14px] leading-[18px] text-charcoal',
+          `h-inputH rounded-input bg-field px-[17px] text-[14px] leading-[18px] text-charcoal ${
+            error ? 'border border-error' : ''
+          } ${rightIcon ? 'pr-[48px]' : ''}`,
           inputClassName,
         )}
         placeholderTextColor={colors.silver}
         selectionColor={colors.ink}
         {...props}
       />
+      {rightIcon ? (
+        <Pressable
+          className="absolute bottom-[0px] right-[8px] h-inputH w-[40px] items-center justify-center"
+          onPress={onRightIconPress}
+        >
+          <Feather name={rightIcon} size={18} color={colors.muted} />
+        </Pressable>
+      ) : null}
+      {error ? <AppText className="mt-[7px] text-[12px] leading-[15px] text-error">{error}</AppText> : null}
     </View>
   );
 }

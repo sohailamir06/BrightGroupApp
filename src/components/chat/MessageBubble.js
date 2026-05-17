@@ -1,18 +1,19 @@
 import { Feather } from '@expo/vector-icons';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { currentUserId } from '../../constants/mock/chatData';
 import AppText from '../AppText';
 
-export default function MessageBubble({ message }) {
+export default function MessageBubble({ message, onReact }) {
   const mine = message.senderId === currentUserId;
 
   return (
     <View className={`mb-[24px] ${mine ? 'items-end' : 'items-start'}`}>
-      <View
+      <Pressable
         className={`max-w-[80%] rounded-[14px] px-[16px] py-[17px] ${
           mine ? 'rounded-br-[3px] bg-action' : 'rounded-bl-[3px] bg-white'
         }`}
+        onLongPress={() => onReact?.(message.id)}
       >
         {message.type === 'attachment' ? (
           <View className="mb-[7px] flex-row items-center">
@@ -25,7 +26,12 @@ export default function MessageBubble({ message }) {
         <AppText className={`text-[17px] leading-[28px] ${mine ? 'text-ink' : 'text-charcoal'}`}>
           {message.text}
         </AppText>
-      </View>
+        {message.reactions?.length ? (
+          <View className="mt-[8px] self-start rounded-full bg-white px-[8px] py-[3px]">
+            <AppText className="text-[12px] leading-[15px] text-homeBlue">Liked</AppText>
+          </View>
+        ) : null}
+      </Pressable>
       <View className="mt-[8px] flex-row items-center">
         <AppText className="text-[11px] leading-[14px] text-silver">{message.createdAt}</AppText>
         {mine ? (

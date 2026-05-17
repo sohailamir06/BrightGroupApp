@@ -1,15 +1,14 @@
 import { useMemo, useState } from 'react';
 
-import { chatConversations, chatMessages, chatUsers, currentUserId } from '../../constants/mock/chatData';
-import { sendLocalMessage } from '../../services/chat/chatService';
+import { chatActions, useChatStore } from '../../store/chat/chatStore';
 import { getConversationParticipant, groupMessagesBySender } from '../../utils/chat/chatSelectors';
 
 export function useConversation(conversationId) {
-  const conversation = chatConversations.find((item) => item.id === conversationId) || chatConversations[0];
-  const [messages, setMessages] = useState(chatMessages[conversation.id] || []);
+  const chat = useChatStore();
+  const conversation = chat.conversations.find((item) => item.id === conversationId) || chat.conversations[0];
+  const messages = chat.messagesByConversation[conversation.id] || [];
   const [draft, setDraft] = useState('');
-  const [typingUserIds] = useState(conversation.typingUserIds || []);
-  const participant = getConversationParticipant(conversation, chatUsers);
+  const participant = getConversationParticipant(conversation, chat.users);
 
   const groupedMessages = useMemo(() => groupMessagesBySender(messages), [messages]);
 
@@ -20,38 +19,21 @@ export function useConversation(conversationId) {
       return;
     }
 
-    const optimisticMessage = {
-      id: `local-${Date.now()}`,
-      conversationId: conversation.id,
-      senderId: currentUserId,
-      type: 'text',
-      text,
-      createdAt: 'Now',
-      status: 'sending',
-    };
-
     setDraft('');
-    setMessages((current) => [...current, optimisticMessage]);
-
-    const confirmed = await sendLocalMessage({
-      conversationId: conversation.id,
-      message: optimisticMessage,
-    });
-
-    setMessages((current) =>
-      current.map((message) => (message.id === optimisticMessage.id ? confirmed : message)),
-    );
+    chatActions.sendMessage(conversation.id, text);
   };
 
   return {
     conversation,
     participant,
-    users: chatUsers,
+    users: chat.users,
     messages: groupedMessages,
     draft,
     setDraft,
     sendMessage,
-    typingUserIds,
-    isTyping: typingUserIds.length > 0,
+    typingUserIds: chat.typingByConversation[conversation.id] ? [participant?.id].filter(Boolean) : [],
+    isTyping: Boolean(chat.typingByConversation[conversation.id]),
+    markRead: () => chatActions.markRead(conversation.id),
+    toggleReaction: (messageId) => chatActions.toggleReaction(conversation.id, messageId),
   };
 }

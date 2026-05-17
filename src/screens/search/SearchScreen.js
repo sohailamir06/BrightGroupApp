@@ -36,6 +36,7 @@ export default function SearchScreen({ navigation }) {
   };
 
   const handleCategoryPress = (category) => {
+    search.setActiveCategory(category.id === 'people' ? 'person' : category.id.replace('documents', 'document').replace('policies', 'policy'));
     search.setQuery(category.title);
   };
 
@@ -81,7 +82,7 @@ export default function SearchScreen({ navigation }) {
 
           <SectionHeader className="mt-[37px]" title="Recent Searches" />
           <View className="mt-[25px]">
-            {search.data.recentSearches.map((item) => (
+            {search.recentSearches.map((item) => (
               <RecentSearchItem key={item} label={item} onPress={search.setQuery} />
             ))}
           </View>
@@ -93,6 +94,17 @@ export default function SearchScreen({ navigation }) {
       ) : (
         <View className="mt-[38px]">
           <SectionHeader title={`Results for "${search.debouncedQuery || search.query}"`} />
+          {search.suggestions.length ? (
+            <View className="mt-[14px] flex-row flex-wrap">
+              {search.suggestions.map((suggestion) => (
+                <View className="mb-[10px] mr-[8px] rounded-full bg-white px-[14px] py-[8px]" key={suggestion}>
+                  <AppText className="text-[13px] leading-[16px] text-muted" onPress={() => search.setQuery(suggestion)}>
+                    {suggestion}
+                  </AppText>
+                </View>
+              ))}
+            </View>
+          ) : null}
         </View>
       )}
     </View>

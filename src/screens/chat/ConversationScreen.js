@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,6 +12,10 @@ import { useConversation } from '../../hooks/chat/useConversation';
 export default function ConversationScreen({ navigation, route }) {
   const conversation = useConversation(route.params?.conversationId);
   const listRef = useRef(null);
+
+  useEffect(() => {
+    conversation.markRead();
+  }, [conversation.conversation.id]);
 
   return (
     <SafeAreaView className="flex-1 items-center bg-canvas">
@@ -42,7 +46,7 @@ export default function ConversationScreen({ navigation, route }) {
             </View>
           }
           onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
-          renderItem={({ item }) => <MessageBubble message={item} />}
+          renderItem={({ item }) => <MessageBubble message={item} onReact={conversation.toggleReaction} />}
           showsVerticalScrollIndicator={false}
         />
         <MessageInput

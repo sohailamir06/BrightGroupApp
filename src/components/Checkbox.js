@@ -1,4 +1,5 @@
 import { Pressable, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 import { cn } from '../utils/classNames';
 import AppText from './AppText';
@@ -17,7 +18,7 @@ export default function Checkbox({ checked, label, onChange, className }) {
           checked && 'border-ink bg-ink',
         )}
       >
-        {checked ? <View className="h-[7px] w-[7px] rounded-full bg-surface" /> : null}
+        {checked ? <Feather name="check" size={12} color="#FFFFFF" /> : null}
       </View>
       <AppText className="ml-[9px] text-[15px] leading-[19px] text-[#59636E]">
         {label}

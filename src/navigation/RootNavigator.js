@@ -6,6 +6,7 @@ import ChatListScreen from '../screens/chat/ChatListScreen';
 import ConversationScreen from '../screens/chat/ConversationScreen';
 import ContentDetailsScreen from '../screens/content/ContentDetailsScreen';
 import ContentFeedScreen from '../screens/content/ContentFeedScreen';
+import FilesScreen from '../screens/files/FilesScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import NewsDetailsScreen from '../screens/news/NewsDetailsScreen';
@@ -29,6 +30,7 @@ export default function RootNavigator() {
       >
         <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
         <Stack.Screen name={ROUTES.HOME} component={HomeScreen} />
+        <Stack.Screen name={ROUTES.FILES} component={FilesScreen} />
         <Stack.Screen name={ROUTES.SEARCH} component={SearchScreen} />
         <Stack.Screen name={ROUTES.CHAT_LIST} component={ChatListScreen} />
         <Stack.Screen name={ROUTES.CONVERSATION} component={ConversationScreen} />

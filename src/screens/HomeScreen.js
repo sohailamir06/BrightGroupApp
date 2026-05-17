@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import AnnouncementTicker from '../components/home/AnnouncementTicker';
@@ -14,10 +14,14 @@ import { homeLabels } from '../constants/homeLabels';
 import { ROUTES } from '../constants/routes';
 import { homeMockData } from '../services/homeMockData';
 import { useResponsive } from '../hooks/useResponsive';
+import { homeActions, useHomeStore } from '../store/home/homeStore';
+import { filterHomeDocuments } from '../utils/home/homeFilters';
 
 export default function HomeScreen({ navigation }) {
   const { compact } = useResponsive();
+  const homeState = useHomeStore();
   const data = homeMockData;
+  const visibleDocuments = filterHomeDocuments(data.documents, homeState.activeFilters);
   const handleTabPress = (tabKey) => {
     if (tabKey === 'search') {
       navigation.navigate(ROUTES.SEARCH);
@@ -48,6 +52,7 @@ export default function HomeScreen({ navigation }) {
             compact ? 'min-h-[1280px]' : 'min-h-[1395px]'
           }`}
           showsVerticalScrollIndicator={false}
+          refreshControl={<RefreshControl refreshing={homeState.refreshing} onRefresh={homeActions.refresh} />}
         >
           <Section title={homeLabels.newsTitle} onActionPress={() => navigation.navigate(ROUTES.NEWS_FEED)}>
             {data.announcements.length ? (
@@ -64,13 +69,18 @@ export default function HomeScreen({ navigation }) {
             )}
           </Section>
 
-          <Section className="mt-[40px]" title={homeLabels.filesTitle} actionLabel={homeLabels.viewAllFiles}>
-            {data.documents.length ? (
-              data.documents.map((item, index) => (
+          <Section
+            className="mt-[40px]"
+            title={homeLabels.filesTitle}
+            actionLabel={homeLabels.viewAllFiles}
+            onActionPress={() => navigation.navigate(ROUTES.FILES)}
+          >
+            {visibleDocuments.length ? (
+              visibleDocuments.map((item, index) => (
                 <DocumentCard className={index > 0 ? 'mt-[16px]' : ''} item={item} key={item.id} />
               ))
             ) : (
-              <EmptyState />
+              <EmptyState title="No matching documents" body="Adjust filters below to widen the result set." />
             )}
           </Section>
 
@@ -79,7 +89,7 @@ export default function HomeScreen({ navigation }) {
           </Section>
 
           <View className="mt-[40px]">
-            <FilterChips filters={data.filters} />
+            <FilterChips filters={data.filters} activeFilters={homeState.activeFilters} onToggle={homeActions.toggleFilter} />
           </View>
 
           <View className="mt-[30px]">

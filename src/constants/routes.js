@@ -1,6 +1,7 @@
 export const ROUTES = {
   LOGIN: 'Login',
   HOME: 'Home',
+  FILES: 'Files',
   SEARCH: 'Search',
   CHAT_LIST: 'ChatList',
   CONVERSATION: 'Conversation',

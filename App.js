@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import RootNavigator from './src/navigation/RootNavigator';
 import { SidebarProvider } from './src/hooks/sidebar/useSidebar';
+import ToastHost from './src/components/ui/ToastHost';
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <SidebarProvider>
         <StatusBar style="dark" translucent backgroundColor="transparent" />
         <RootNavigator />
+        <ToastHost />
       </SidebarProvider>
     </SafeAreaProvider>
   );

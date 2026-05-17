@@ -5,6 +5,7 @@ import AuthCard from '../components/AuthCard';
 import BrandHeader from '../components/BrandHeader';
 import Button from '../components/Button';
 import Checkbox from '../components/Checkbox';
+import ModalShell from '../components/ModalShell';
 import Screen from '../components/Screen';
 import TextField from '../components/TextField';
 import { ROUTES } from '../constants/routes';
@@ -15,9 +16,11 @@ export default function LoginScreen({ navigation }) {
   const form = useLoginForm();
   const { compact } = useResponsive();
 
-  const handleSubmit = () => {
-    form.submit();
-    navigation.navigate(ROUTES.HOME);
+  const handleSubmit = async () => {
+    const success = await form.submit();
+    if (success) {
+      navigation.navigate(ROUTES.HOME);
+    }
   };
 
   return (
@@ -52,7 +55,9 @@ export default function LoginScreen({ navigation }) {
             label="Corporate Email"
             value={form.email}
             onChangeText={form.setEmail}
+            onBlur={() => form.blurField('email')}
             placeholder="name@brightnow.com"
+            error={form.touched.email ? form.errors.email : ''}
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="email-address"
@@ -63,10 +68,15 @@ export default function LoginScreen({ navigation }) {
             className="mt-[26px]"
             label="Password"
             actionLabel="Forgot?"
+            onActionPress={form.openForgotPassword}
             value={form.password}
             onChangeText={form.setPassword}
+            onBlur={() => form.blurField('password')}
             placeholder="••••••••"
-            secureTextEntry
+            secureTextEntry={!form.passwordVisible}
+            error={form.touched.password ? form.errors.password : ''}
+            rightIcon={form.passwordVisible ? 'eye-off' : 'eye'}
+            onRightIconPress={form.togglePasswordVisible}
             textContentType="password"
           />
 
@@ -78,8 +88,12 @@ export default function LoginScreen({ navigation }) {
           />
 
           <Button
-            className="mt-[42px] w-full"
-            title="Continue to Workspace  →"
+            title={form.isSubmitting ? 'Signing In...' : 'Continue to Workspace  →'}
+            disabled={form.isSubmitting || (!form.isValid && (form.touched.email || form.touched.password))}
+            accessibilityState={{ disabled: form.isSubmitting }}
+            className={`mt-[42px] w-full ${
+              form.isSubmitting || (!form.isValid && (form.touched.email || form.touched.password)) ? 'opacity-60' : ''
+            }`}
             onPress={handleSubmit}
           />
         </AuthCard>
@@ -92,6 +106,27 @@ export default function LoginScreen({ navigation }) {
           <AppText className="ml-[27px] text-tiny font-bold uppercase text-silver">PRIVACY</AppText>
         </View>
       </View>
+
+      <ModalShell visible={form.forgotPasswordOpen} title="Reset Password" onClose={form.closeForgotPassword}>
+        <AppText className="text-[15px] leading-[22px] text-muted">
+          Enter your corporate email and we will send reset instructions.
+        </AppText>
+        <TextField
+          className="mt-[22px]"
+          label="Corporate Email"
+          value={form.forgotEmail}
+          onChangeText={form.setForgotEmail}
+          placeholder="name@brightnow.com"
+          error={form.forgotError}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <Button
+          className="mt-[24px]"
+          title={form.isSubmitting ? 'Sending...' : 'Send Reset Link'}
+          onPress={form.submitForgotPassword}
+        />
+      </ModalShell>
     </Screen>
   );
 }

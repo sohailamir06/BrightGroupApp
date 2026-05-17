@@ -32,12 +32,18 @@ export const homeMockData = {
       title: '2023_Q3_Strategy_V7:',
       meta: 'Shared by Sarah J.',
       type: 'pdf',
+      recent: true,
+      byMe: false,
+      team: 'Bright Digital Team',
     },
     {
       id: 'meeting-notes',
       title: 'Meeting_Notes_Q3.doc',
       meta: 'Edited 2h ago',
       type: 'doc',
+      recent: true,
+      byMe: true,
+      team: 'Bright Digital Team',
     },
   ],
   teammates: [

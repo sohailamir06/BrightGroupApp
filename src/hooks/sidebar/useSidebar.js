@@ -16,6 +16,8 @@ export function SidebarProvider({ children }) {
   const [activeWorkspaceId, setActiveWorkspaceId] = useState('bright-digital');
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
   const [expandedGroupIds, setExpandedGroupIds] = useState([]);
+  const [activeMenuId, setActiveMenuId] = useState('settings');
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   const menuGroups = useMemo(
     () => getVisibleMenuGroups(sidebarMenu, sidebarPermissions),
@@ -36,6 +38,11 @@ export function SidebarProvider({ children }) {
       darkModeEnabled,
       setDarkModeEnabled,
       expandedGroupIds,
+      activeMenuId,
+      setActiveMenuId,
+      logoutModalOpen,
+      openLogoutModal: () => setLogoutModalOpen(true),
+      closeLogoutModal: () => setLogoutModalOpen(false),
       toggleGroup: (groupId) =>
         setExpandedGroupIds((current) =>
           current.includes(groupId)
@@ -43,7 +50,7 @@ export function SidebarProvider({ children }) {
             : [...current, groupId],
         ),
     }),
-    [activeWorkspaceId, darkModeEnabled, expandedGroupIds, isOpen, menuGroups],
+    [activeMenuId, activeWorkspaceId, darkModeEnabled, expandedGroupIds, isOpen, logoutModalOpen, menuGroups],
   );
 
   return (
